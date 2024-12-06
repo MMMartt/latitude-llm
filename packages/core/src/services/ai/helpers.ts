@@ -139,7 +139,7 @@ export function createProvider({
       return Result.ok(
         createOpenAI({
           apiKey: apiKey,
-          compatibility: 'compatible',
+          compatibility: 'strict',
           baseURL: url,
         }),
       )
