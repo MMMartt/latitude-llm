@@ -3,22 +3,13 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useCurrentDocument } from '$/app/providers/DocumentProvider'
 import { ROUTES } from '$/services/routes'
 import useProviderApiKeys from '$/stores/providerApiKeys'
-import {
-  Conversation,
-  Message as ConversationMessage,
-  Chain as LegacyChain,
-} from '@latitude-data/compiler'
+import { Conversation } from '@latitude-data/compiler'
 import {
   AppliedRules,
-  applyProviderRules,
   LATITUDE_DOCS_URL,
   ProviderRules,
 } from '@latitude-data/core/browser'
-import {
-  Adapters,
-  ConversationMetadata,
-  Chain as PromptlChain,
-} from '@latitude-data/promptl'
+import { ConversationMetadata } from '@latitude-data/promptl'
 import {
   Alert,
   Button,
@@ -33,6 +24,7 @@ import {
 import Link from 'next/link'
 
 import Actions, { ActionsState } from './Actions'
+import { parsePromptServer } from '$/actions/prompts/parse'
 
 function WarningLink({ providerRule }: { providerRule: ProviderRules }) {
   return (
@@ -77,7 +69,7 @@ export default function Preview({
   const { commit } = useCurrentCommit()
   const { document } = useCurrentDocument()
   const { project } = useCurrentProject()
-  const [conversation, setConversation] = useState<Conversation>()
+  const [conversation, setConversation] = useState<Conversation | undefined>()
   const provider = useMemo(() => {
     if (!conversation) return undefined
     if (!providers) return undefined
@@ -85,7 +77,7 @@ export default function Preview({
     if (!providerName) return undefined
     return providers.find((p) => p.name === providerName)
   }, [conversation, providers])
-  const [fixedMessages, setFixedMessages] = useState<ConversationMessage[]>()
+  const [fixedMessages, setFixedMessages] = useState<Conversation['messages']>()
   const [warningRule, setWarningRule] = useState<AppliedRules | undefined>()
 
   const [completed, setCompleted] = useState(true)
@@ -94,34 +86,21 @@ export default function Preview({
 
   useAutoScroll(containerRef, { startAtBottom: true })
 
+  console.log({ metadata })
   useEffect(() => {
     if (!document) return
     if (!metadata) return
     if (metadata.errors.length > 0) return
 
-    const usePromptl = document.promptlVersion !== 0
-    const chain = usePromptl
-      ? new PromptlChain({
-          prompt: metadata.resolvedPrompt,
-          parameters,
-          adapter: Adapters.default,
-          includeSourceMap: true,
-        })
-      : new LegacyChain({
-          prompt: metadata.resolvedPrompt,
-          parameters,
-          includeSourceMap: true,
-        })
-
-    chain
-      .step()
-      .then(({ completed, ...rest }) => {
-        const conversation =
-          document.promptlVersion === 0
-            ? (rest as { conversation: Conversation }).conversation
-            : (rest as unknown as Conversation)
+    console.log({ metadata })
+    parsePromptServer(metadata.resolvedPrompt, {history: []})
+      .then((req) => {
+        console.log({req})
         setError(undefined)
-        setConversation(conversation)
+        setConversation({
+          config: {},
+          messages: req.messages,
+        })
         setCompleted(completed)
       })
       .catch((error) => {
@@ -139,14 +118,14 @@ export default function Preview({
       return
     }
 
-    const rule = applyProviderRules({
-      providerType: provider.provider,
-      messages: conversation.messages,
-      config: conversation.config,
-    })
+    // const rule = applyProviderRules({
+    //   providerType: provider.provider,
+    //   messages: conversation.messages,
+    //   config: conversation.config,
+    // })
 
-    setFixedMessages(rule?.messages ?? conversation.messages)
-    setWarningRule(rule)
+    setFixedMessages(conversation.messages)
+    // setWarningRule(rule)
   }, [provider, conversation])
 
   return (
@@ -168,7 +147,7 @@ export default function Preview({
             <Message
               key={index}
               role={message.role}
-              content={message.content}
+              content={message.content as string}
               parameters={parameters}
               collapseParameters={!expandParameters}
             />

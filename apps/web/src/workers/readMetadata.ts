@@ -1,6 +1,8 @@
-import { readMetadata } from '@latitude-data/compiler'
+import {
+  type ConversationMetadata,
+  readMetadata,
+} from '@latitude-data/compiler'
 import { type DocumentVersion } from '@latitude-data/core/browser'
-import { scan } from '@latitude-data/promptl'
 
 export type ReadMetadataWorkerProps = Parameters<typeof readMetadata>[0] & {
   promptlVersion: number
@@ -9,42 +11,53 @@ export type ReadMetadataWorkerProps = Parameters<typeof readMetadata>[0] & {
 }
 
 self.onmessage = async function (event: { data: ReadMetadataWorkerProps }) {
-  const { document, documents, prompt, promptlVersion, ...rest } = event.data
-
-  const referenceFn = readDocument(document, documents, prompt)
-
-  const props = {
-    ...rest,
-    prompt,
-    referenceFn,
-  }
-
-  const metadata =
-    promptlVersion === 0 ? await readMetadata(props) : await scan(props)
-
-  const { setConfig: _, errors: errors, ...returnedMetadata } = metadata
-
-  const errorsWithPositions = errors.map((error) => {
-    return {
-      start: {
-        line: error.start?.line ?? 0,
-        column: error.start?.column ?? 0,
-      },
-      end: {
-        line: error.end?.line ?? 0,
-        column: error.end?.column ?? 0,
-      },
-      message: error.message,
-      name: error.name,
-    }
-  })
-
+  const { prompt } = event.data
+  console.log(prompt)
   self.postMessage({
-    ...returnedMetadata,
-    errors: errorsWithPositions,
-  })
+    config: {},
+    errors: [],
+    parameters: new Set<string>(),
+    includedPromptPaths: new Set<string>(),
+    resolvedPrompt: prompt,
+  } as never as ConversationMetadata)
+
+  return
+  // const referenceFn = readDocument(document, documents, prompt)
+  //
+  // const props = {
+  //   ...rest,
+  //   prompt,
+  //   referenceFn,
+  // }
+  //
+  // const metadata =
+  //   promptlVersion === 0 ? await readMetadata(props) : await scan(props)
+  //
+  // const { setConfig: _, errors: errors, ...returnedMetadata } = metadata
+  //
+  // const errorsWithPositions = errors.map((error) => {
+  //   return {
+  //     start: {
+  //       line: error.start?.line ?? 0,
+  //       column: error.start?.column ?? 0,
+  //     },
+  //     end: {
+  //       line: error.end?.line ?? 0,
+  //       column: error.end?.column ?? 0,
+  //     },
+  //     message: error.message,
+  //     name: error.name,
+  //   }
+  // })
+  //
+  // self.postMessage({
+  //   ...returnedMetadata,
+  //   errors: errorsWithPositions,
+  // })
 }
 
+// @ts-ignore
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function readDocument(
   document?: DocumentVersion,
   documents?: DocumentVersion[],

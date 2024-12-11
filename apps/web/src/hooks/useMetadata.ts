@@ -26,6 +26,7 @@ export function useMetadata({
       workerRef.current = worker
 
       worker.onmessage = (event: { data: ConversationMetadata }) => {
+        console.log({event})
         setMetadata(event.data)
         onMetadataProcessed?.(event.data.parameters)
       }

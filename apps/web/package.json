@@ -18,8 +18,8 @@
   },
   "dependencies": {
     "@intercom/messenger-js-sdk": "^0.0.14",
-    "@latitude-data/constants": "workspace:*",
     "@latitude-data/compiler": "workspace:^",
+    "@latitude-data/constants": "workspace:*",
     "@latitude-data/core": "workspace:*",
     "@latitude-data/env": "workspace:^",
     "@latitude-data/promptl": "^0.3.2",
@@ -47,6 +47,7 @@
     "next-themes": "^0.3.0",
     "nextjs-toploader": "^1.6.12",
     "nprogress": "^0.2.0",
+    "openai": "^4.68.4",
     "oslo": "1.2.0",
     "posthog-js": "^1.161.6",
     "react": "19.0.0-rc-5d19e1c8-20240923",
