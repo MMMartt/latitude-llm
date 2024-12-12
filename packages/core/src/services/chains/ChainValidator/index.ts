@@ -1,11 +1,4 @@
-import {
-  CompileError,
-  Conversation,
-  Chain as LegacyChain,
-  Message,
-} from '@latitude-data/compiler'
 import { RunErrorCodes } from '@latitude-data/constants/errors'
-import { Chain as PromptlChain } from '@latitude-data/promptl'
 import { JSONSchema7 } from 'json-schema'
 import { z } from 'zod'
 
@@ -17,7 +10,6 @@ import { ChainError } from '../ChainErrors'
 import { checkFreeProviderQuota } from '../checkFreeProviderQuota'
 import { CachedApiKeys } from '../run'
 
-type SomeChain = LegacyChain | PromptlChain
 
 export type ValidatedStep = {
   config: Config

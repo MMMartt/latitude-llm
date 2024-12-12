@@ -18,11 +18,9 @@
   "dependencies": {
     "@hono/node-server": "^1.12.0",
     "@hono/zod-validator": "^0.2.2",
-    "@latitude-data/compiler": "workspace:^",
     "@latitude-data/constants": "workspace:^",
     "@latitude-data/core": "workspace:^",
     "@latitude-data/env": "workspace:^",
-    "@latitude-data/promptl": "^0.3.2",
     "@sentry/cli": "^2.37.0",
     "@sentry/node": "^8.30.0",
     "@t3-oss/env-core": "^0.10.1",

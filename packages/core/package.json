@@ -50,7 +50,6 @@
     "@aws-sdk/client-s3": "^3.645.0",
     "@aws-sdk/s3-request-presigner": "^3.645.0",
     "@faker-js/faker": "^8.4.1",
-    "@latitude-data/compiler": "workspace:^",
     "@latitude-data/constants": "workspace:*",
     "@latitude-data/env": "workspace:*",
     "@latitude-data/eslint-config": "workspace:*",
@@ -107,7 +106,6 @@
     "@ai-sdk/openai": "^1.0.6",
     "@aws-sdk/client-s3": "^3.645.0",
     "@aws-sdk/s3-request-presigner": "^3.645.0",
-    "@latitude-data/compiler": "workspace:^",
     "@latitude-data/env": "workspace:^",
     "@plunk/node": "^3.0.2",
     "@react-email/components": "^0.0.23",
@@ -139,8 +137,5 @@
     "uuid": "^10.0.0",
     "vue": "^3.4.38",
     "zod": "^3.23.8"
-  },
-  "dependencies": {
-    "@latitude-data/promptl": "^0.3.2"
   }
 }
