@@ -3,6 +3,8 @@ import {
   readMetadata,
 } from '@latitude-data/compiler'
 import { type DocumentVersion } from '@latitude-data/core/browser'
+import yaml from 'yaml'
+import type { PromptFile } from '@monica/prompt-parser-wasm/dist/src/schema'
 
 export type ReadMetadataWorkerProps = Parameters<typeof readMetadata>[0] & {
   promptlVersion: number
@@ -13,10 +15,17 @@ export type ReadMetadataWorkerProps = Parameters<typeof readMetadata>[0] & {
 self.onmessage = async function (event: { data: ReadMetadataWorkerProps }) {
   const { prompt } = event.data
   console.log(prompt)
+  const promptFile = yaml.parse(prompt) as PromptFile
+  const parameters = new Set<string>()
+  try {
+    Object.keys(promptFile.input_schema.properties).forEach((k) => parameters.add(k))
+  } catch (_) {
+    //
+  }
   self.postMessage({
     config: {},
     errors: [],
-    parameters: new Set<string>(),
+    parameters,
     includedPromptPaths: new Set<string>(),
     resolvedPrompt: prompt,
   } as never as ConversationMetadata)

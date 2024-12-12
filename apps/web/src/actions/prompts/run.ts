@@ -22,7 +22,7 @@ export const runPromptAction = authProcedure
     const { prompt, parameters, promptlVersion } = input
     const stream = createStreamableValue()
     try {
-      const run = await runPrompt({
+      const args = {
         workspace: ctx.workspace,
         source: LogSources.Evaluation,
         prompt,
@@ -31,7 +31,9 @@ export const runPromptAction = authProcedure
         providersMap: await buildProvidersMap({
           workspaceId: ctx.workspace.id,
         }),
-      }).then((r) => r.unwrap())
+      }
+      console.log({ args })
+      const run = await runPrompt(args).then((r) => r.unwrap())
 
       pipeToStream(run.stream, stream)
 

@@ -86,14 +86,13 @@ export default function Preview({
 
   useAutoScroll(containerRef, { startAtBottom: true })
 
-  console.log({ metadata })
   useEffect(() => {
     if (!document) return
     if (!metadata) return
     if (metadata.errors.length > 0) return
 
-    console.log({ metadata })
-    parsePromptServer(metadata.resolvedPrompt, {history: []})
+    console.log({ metadata, parameters })
+    parsePromptServer(metadata.resolvedPrompt, parameters)
       .then((req) => {
         console.log({req})
         setError(undefined)

@@ -34,7 +34,7 @@ importers:
         version: 4.6.0(monaco-editor@0.50.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@monica/prompt-parser-wasm':
         specifier: git+ssh://git@gitlab.monica.cn:tools/prompt-parser-wasm.git
-        version: git+ssh://git@gitlab.monica.cn/tools/prompt-parser-wasm.git#86837612279ca26ba0bd333d1889c4efe7565526(encoding@0.1.13)(zod@3.23.8)
+        version: git+ssh://git@gitlab.monica.cn/tools/prompt-parser-wasm.git#a4f0e0e99b6522677c1205ad753753380e60dae6(encoding@0.1.13)(zod@3.23.8)
       '@plunk/node':
         specifier: ^3.0.2
         version: 3.0.3
@@ -176,6 +176,9 @@ importers:
       uuid:
         specifier: ^10.0.0
         version: 10.0.0
+      yaml:
+        specifier: ^2.4.5
+        version: 2.6.0
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -2832,6 +2835,10 @@ packages:
     resolution: {integrity: sha512-IzL8ZoEDIBRWEzlCcRhOaCupYyN5gdIK+Q6fbFdPDg6HqX6jpkItn7DFIpW9LQzXG6Df9sA7+OKnq0qlz/GaQg==}
     engines: {node: '>=6.0.0'}
 
+  '@jridgewell/gen-mapping@0.3.8':
+    resolution: {integrity: sha512-imAbBGkb+ebQyxKgzv5Hu2nmROxoDOXHh80evxdoXNOrvAnVx7zimzc1Oo5h9RlfV4vPXaE2iM5pOFbvOCClWA==}
+    engines: {node: '>=6.0.0'}
+
   '@jridgewell/resolve-uri@3.1.2':
     resolution: {integrity: sha512-bRISgCIjP20/tbWSPWMEi54QVPRZExkuD9lJL+UIxUKtwVJA8wW1Trb1jMs1RFXo1CBTNZ/5hpC9QvmKWdopKw==}
     engines: {node: '>=6.0.0'}
@@ -2942,8 +2949,8 @@ packages:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
 
-  '@monica/prompt-parser-wasm@git+ssh://git@gitlab.monica.cn/tools/prompt-parser-wasm.git#86837612279ca26ba0bd333d1889c4efe7565526':
-    resolution: {commit: 86837612279ca26ba0bd333d1889c4efe7565526, repo: ssh://git@gitlab.monica.cn/tools/prompt-parser-wasm.git, type: git}
+  '@monica/prompt-parser-wasm@git+ssh://git@gitlab.monica.cn/tools/prompt-parser-wasm.git#a4f0e0e99b6522677c1205ad753753380e60dae6':
+    resolution: {commit: a4f0e0e99b6522677c1205ad753753380e60dae6, repo: ssh://git@gitlab.monica.cn/tools/prompt-parser-wasm.git, type: git}
     version: 1.0.0
     engines: {node: '>=16.0.0'}
 
@@ -12794,7 +12801,7 @@ snapshots:
     dependencies:
       '@babel/parser': 7.26.3
       '@babel/types': 7.26.3
-      '@jridgewell/gen-mapping': 0.3.5
+      '@jridgewell/gen-mapping': 0.3.8
       '@jridgewell/trace-mapping': 0.3.25
       jsesc: 3.1.0
 
@@ -13852,13 +13859,19 @@ snapshots:
       '@jridgewell/sourcemap-codec': 1.5.0
       '@jridgewell/trace-mapping': 0.3.25
 
+  '@jridgewell/gen-mapping@0.3.8':
+    dependencies:
+      '@jridgewell/set-array': 1.2.1
+      '@jridgewell/sourcemap-codec': 1.5.0
+      '@jridgewell/trace-mapping': 0.3.25
+
   '@jridgewell/resolve-uri@3.1.2': {}
 
   '@jridgewell/set-array@1.2.1': {}
 
   '@jridgewell/source-map@0.3.6':
     dependencies:
-      '@jridgewell/gen-mapping': 0.3.5
+      '@jridgewell/gen-mapping': 0.3.8
       '@jridgewell/trace-mapping': 0.3.25
 
   '@jridgewell/sourcemap-codec@1.5.0': {}
@@ -14180,7 +14193,7 @@ snapshots:
       react: 19.0.0-rc-5d19e1c8-20240923
       react-dom: 19.0.0-rc-5d19e1c8-20240923(react@19.0.0-rc-5d19e1c8-20240923)
 
-  '@monica/prompt-parser-wasm@git+ssh://git@gitlab.monica.cn/tools/prompt-parser-wasm.git#86837612279ca26ba0bd333d1889c4efe7565526(encoding@0.1.13)(zod@3.23.8)':
+  '@monica/prompt-parser-wasm@git+ssh://git@gitlab.monica.cn/tools/prompt-parser-wasm.git#a4f0e0e99b6522677c1205ad753753380e60dae6(encoding@0.1.13)(zod@3.23.8)':
     dependencies:
       openai: 4.76.1(encoding@0.1.13)(zod@3.23.8)
     transitivePeerDependencies:
