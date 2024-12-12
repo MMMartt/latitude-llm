@@ -56,29 +56,29 @@ async function resolveDocumentChanges({
 
   const newDocumentsWithUpdatedHash = await Promise.all(
     newDocuments.map(async (d) => {
-      if (d.promptlVersion === 0) {
-        const metadata = await readMetadata({
-          prompt: d.content ?? '',
-          fullPath: d.path,
-          referenceFn: getDocumentContent,
-          configSchema,
-        })
-        if (metadata.errors.length > 0) {
-          errors[d.documentUuid] = metadata.errors
-        }
-
-        return {
-          ...d,
-          resolvedContent: metadata.resolvedPrompt,
-          contentHash: hashContent(metadata.resolvedPrompt),
-        }
-      }
-      const metadata = await scan({
+      // if (d.promptlVersion === 0) {
+      const metadata = await readMetadata({
         prompt: d.content ?? '',
         fullPath: d.path,
         referenceFn: getDocumentContent,
         configSchema,
       })
+      if (metadata.errors.length > 0) {
+        errors[d.documentUuid] = metadata.errors
+      }
+
+      return {
+        ...d,
+        resolvedContent: metadata.resolvedPrompt,
+        contentHash: hashContent(metadata.resolvedPrompt),
+      }
+      // }
+      // const metadata = await scan({
+      //   prompt: d.content ?? '',
+      //   fullPath: d.path,
+      //   referenceFn: getDocumentContent,
+      //   configSchema,
+      // })
 
       if (metadata.errors.length > 0) {
         errors[d.documentUuid] = metadata.errors as CompileError[]
@@ -106,6 +106,7 @@ async function resolveDocumentChanges({
 
   return { documents: changedDocuments, errors }
 }
+
 async function replaceCommitChanges(
   {
     commit,
