@@ -1,10 +1,3 @@
-import {
-  createChain,
-  Chain as LegacyChain,
-  readMetadata,
-} from '@latitude-data/compiler'
-import { Chain as PromptlChain } from '@latitude-data/promptl'
-
 import { Workspace } from '../../browser'
 import { LogSources } from '../../constants'
 import { Result } from '../../lib'

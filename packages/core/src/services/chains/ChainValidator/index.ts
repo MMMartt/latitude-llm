@@ -86,19 +86,19 @@ const safeChain = async ({
   prevText: string | undefined
 }) => {
   try {
-    if (promptlVersion === 0) {
-      const { completed, conversation } = await (chain as LegacyChain).step(
-        prevText,
-      )
-      return Result.ok({ chainCompleted: completed, conversation })
-    }
-    const { completed, messages, config } = await (chain as PromptlChain).step(
+    // if (promptlVersion === 0) {
+    const { completed, conversation } = await (chain as LegacyChain).step(
       prevText,
     )
-    return Result.ok({
-      chainCompleted: completed,
-      conversation: { messages, config },
-    })
+    return Result.ok({ chainCompleted: completed, conversation })
+    // }
+    // const { completed, messages, config } = await (chain as PromptlChain).step(
+    //   prevText,
+    // )
+    // return Result.ok({
+    //   chainCompleted: completed,
+    //   conversation: { messages, config },
+    // })
   } catch (e) {
     const error = e as CompileError
     return Result.error(

@@ -5,12 +5,11 @@ import { RunErrorCodes } from '@latitude-data/constants/errors'
 import {
   CoreMessage,
   CoreTool,
-  jsonSchema,
   LanguageModel,
   ObjectStreamPart,
   streamObject as originalStreamObject,
-  streamText as originalStreamText,
   StreamObjectResult,
+  streamText as originalStreamText,
   StreamTextResult,
   TextStreamPart,
 } from 'ai'
@@ -61,6 +60,7 @@ export type StreamChunk =
   | ObjectStreamPart<unknown>
 
 export type ObjectOutput = 'object' | 'array' | 'no-schema' | undefined
+
 export async function ai({
   provider: apiProvider,
   prompt,
@@ -128,7 +128,8 @@ export async function ai({
 
     const languageModel = customLanguageModel
       ? customLanguageModel
-      : llmProvider.value(model, { cacheControl: config.cacheControl })
+      : // : llmProvider.value(model, { cacheControl: config.cacheControl })
+        llmProvider.value(model)
     const toolsResult = buildTools(tools)
     if (toolsResult.error) return toolsResult
 
@@ -149,28 +150,28 @@ export async function ai({
       })
     }
 
-    if (schema && output) {
-      const result = await streamObject({
-        ...commonOptions,
-        schema: jsonSchema(schema),
-        // output is valid but depending on the type of schema
-        // there might be a mismatch (e.g you pass an object schema but the
-        // output is "array"). Not really an issue we need to defend atm.
-        output: output as any,
-      })
+    // if (schema && output) {
+    //   const result = await streamObject({
+    //     ...commonOptions,
+    //     schema: jsonSchema(schema),
+    //     // output is valid but depending on the type of schema
+    //     // there might be a mismatch (e.g you pass an object schema but the
+    //     // output is "array"). Not really an issue we need to defend atm.
+    //     output: output as any,
+    //   })
+    //
+    //   return Result.ok({
+    //     type: 'object',
+    //     data: {
+    //       fullStream: result.fullStream,
+    //       object: result.object,
+    //       usage: result.usage,
+    //       providerName: provider,
+    //     },
+    //   })
+    // }
 
-      return Result.ok({
-        type: 'object',
-        data: {
-          fullStream: result.fullStream,
-          object: result.object,
-          usage: result.usage,
-          providerName: provider,
-        },
-      })
-    }
-
-    const result = await streamText(commonOptions)
+    const result = await streamText(commonOptions as any)
     return Result.ok({
       type: 'text',
       data: {

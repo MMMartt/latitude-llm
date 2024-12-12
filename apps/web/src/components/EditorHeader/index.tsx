@@ -20,7 +20,7 @@ import useModelOptions from '$/hooks/useModelOptions'
 import { ROUTES } from '$/services/routes'
 import useProviderApiKeys from '$/stores/providerApiKeys'
 import Link from 'next/link'
-import { parse, stringify } from 'yaml'
+import { parseBaseMetadata } from '@latitude-data/core/lib/utils'
 
 type PromptMetadata = { provider?: string; model?: string }
 export type IProviderByName = Record<string, ProviderApiKey>
@@ -34,43 +34,25 @@ export function updatePromptMetadata(
   prompt: string,
   updates: Record<string, any>,
 ) {
-  // Check if the prompt has frontmatter
-  if (!prompt.match(/(?:\/\*[\s\S]*?\*\/\s*)?---/)) {
-    // If no frontmatter exists, create one with the updates
-    const newFrontMatter = stringify(updates)
-    return `---\n${newFrontMatter}---\n\n${prompt}`
+  const { parsed, exists } = parseBaseMetadata(prompt)
+  // Merge updates with existing metadata
+  const merged = {
+    ...parsed,
+    ...updates,
   }
 
-  try {
-    const frontMatter = extractFrontMatter(prompt)
-    if (!frontMatter) {
-      // Invalid frontmatter format, create new one
-      const newFrontMatter = stringify(updates)
-      return `---\n${newFrontMatter}---\n\n${prompt.replace(/(?:\/\*[\s\S]*?\*\/\s*)?---\n[\s\S]*?\n---\n/, '')}`
-    }
+  // Convert merged metadata to string
+  const newMetadata = Object.entries(merged)
+    .map(([key, value]) => `# ${key}: ${value}`)
+    .join('\n')
 
-    // Parse existing frontmatter
-    const parsed = parse(frontMatter) || {}
-
-    // Merge updates with existing frontmatter
-    const updated = {
-      ...parsed,
-      ...updates,
-    }
-
-    // Stringify the updated frontmatter
-    const newFrontMatter = stringify(updated)
-
-    // Replace old frontmatter with new one, preserving any leading comments
-    return prompt.replace(
-      /((?:\/\*[\s\S]*?\*\/\s*)?---\n)[\s\S]*?\n---/,
-      `$1${newFrontMatter}---`,
-    )
-  } catch (error) {
-    // If parsing fails, create new frontmatter
-    const newFrontMatter = stringify(updates)
-    return `---\n${newFrontMatter}---\n\n${prompt.replace(/(?:\/\*[\s\S]*?\*\/\s*)?---\n[\s\S]*?\n---\n/, '')}`
+  // If there was existing metadata, replace it
+  if (exists) {
+    return prompt.replace(exists, newMetadata + '\n')
   }
+
+  // If no existing metadata, add new metadata at the beginning
+  return `${newMetadata}\n\n${prompt}`
 }
 
 export default function EditorHeader({

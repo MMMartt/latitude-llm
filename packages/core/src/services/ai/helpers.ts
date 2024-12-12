@@ -1,12 +1,10 @@
 import { createAnthropic } from '@ai-sdk/anthropic'
-import { createAzure } from '@ai-sdk/azure'
-import { createGoogleGenerativeAI } from '@ai-sdk/google'
 import { createMistral } from '@ai-sdk/mistral'
 import { createOpenAI } from '@ai-sdk/openai'
 import { Message, MessageRole } from '@latitude-data/compiler'
 import { RunErrorCodes } from '@latitude-data/constants/errors'
-import { JSONSchema7 } from 'json-schema'
 import { z } from 'zod'
+import { OpenAI } from 'openai'
 
 import { Providers } from '../../constants'
 import { Result } from '../../lib'
@@ -46,17 +44,7 @@ type GoogleConfig = z.infer<typeof googleConfig>
 
 export type Config = {
   provider: string
-  model: string
-  url?: string
-  cacheControl?: boolean
-  schema?: JSONSchema7
-  azure?: { resourceName: string }
-  google?: GoogleConfig
-  tools?: Record<
-    string,
-    { description?: string; parameters: Record<string, any> }
-  >
-}
+} & OpenAI.Chat.ChatCompletionCreateParams
 
 export type PartialConfig = Omit<Config, 'provider'>
 
@@ -117,30 +105,60 @@ export function createProvider({
           apiKey,
         }),
       )
-    case Providers.Azure:
-      return Result.ok(
-        createAzure({
-          apiKey,
-          ...(config?.azure ?? {}),
-        }),
-      )
-    case Providers.Google: {
-      const firstMessageResult = isFirstMessageOfUserType(messages)
-      if (firstMessageResult.error) return firstMessageResult
-
-      return Result.ok(
-        createGoogleGenerativeAI({
-          apiKey,
-          ...(config?.google ?? {}),
-        }),
-      )
-    }
+    // case Providers.Azure:
+    //   return Result.ok(
+    //     createAzure({
+    //       apiKey,
+    //       ...(config?.azure ?? {}),
+    //     }),
+    //   )
+    // case Providers.Google: {
+    //   const firstMessageResult = isFirstMessageOfUserType(messages)
+    //   if (firstMessageResult.error) return firstMessageResult
+    //
+    //   return Result.ok(
+    //     createGoogleGenerativeAI({
+    //       apiKey,
+    //       ...(config?.google ?? {}),
+    //     }),
+    //   )
+    // }
     case Providers.Custom:
       return Result.ok(
         createOpenAI({
           apiKey: apiKey,
           compatibility: 'strict',
           baseURL: url,
+          fetch: async (url, init) => {
+            // 确保 init 存在
+            if (!init) {
+              init = {}
+            }
+            const originalConfig = {
+              ...(init.body ? JSON.parse(init.body as string) : {}),
+            }
+            const final = {
+              ...originalConfig,
+              ...config,
+              messages: originalConfig.messages,
+            }
+            delete final['provider']
+
+            // 创建新的请求配置
+            const newInit = {
+              ...init,
+              // 直接使用原始 config 作为新的请求体
+              body: JSON.stringify(final),
+              // 确保设置正确的 headers
+              headers: {
+                ...init.headers,
+                'Content-Type': 'application/json',
+              },
+            }
+
+            // 使用全局 fetch 发送请求
+            return fetch(url, newInit)
+          },
         }),
       )
     default:

@@ -6,6 +6,28 @@ import { type DocumentVersion } from '@latitude-data/core/browser'
 import yaml from 'yaml'
 import type { PromptFile } from '@monica/prompt-parser-wasm/dist/src/schema'
 
+function parseBaseMetadata(prompt: string): {
+  parsed: Record<string, string>
+  exists: string
+} {
+  // Match all # key:value at the beginning of the file
+  const metadataRegex = /^(?:#\s*([^:\n]+)\s*:\s*([^\n]+)\n)*/
+  const existingMetadata = prompt.match(metadataRegex)?.[0] || ''
+
+  // Parse existing metadata
+  const parsed: Record<string, string> = {}
+  existingMetadata.split('\n').forEach((line) => {
+    if (!line.startsWith('#')) return
+    const match = line.match(/^#\s*([^:\n]+)\s*:\s*([^\n]+)$/)
+    if (match) {
+      const [, key, value] = match
+      parsed[key!.trim()] = value!.trim()
+    }
+  })
+
+  return { parsed, exists: existingMetadata }
+}
+
 export type ReadMetadataWorkerProps = Parameters<typeof readMetadata>[0] & {
   promptlVersion: number
   document?: DocumentVersion
@@ -18,12 +40,15 @@ self.onmessage = async function (event: { data: ReadMetadataWorkerProps }) {
   const promptFile = yaml.parse(prompt) as PromptFile
   const parameters = new Set<string>()
   try {
-    Object.keys(promptFile.input_schema.properties).forEach((k) => parameters.add(k))
+    Object.keys(promptFile.input_schema.properties).forEach((k) =>
+      parameters.add(k),
+    )
   } catch (_) {
     //
   }
+  const { parsed } = parseBaseMetadata(prompt)
   self.postMessage({
-    config: {},
+    config: parsed,
     errors: [],
     parameters,
     includedPromptPaths: new Set<string>(),

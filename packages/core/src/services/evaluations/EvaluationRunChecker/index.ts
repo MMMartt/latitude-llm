@@ -18,6 +18,8 @@ import { ChainError } from '../../chains/ChainErrors'
 import { serialize } from '../../documentLogs/serialize'
 import { createRunError } from '../../runErrors/create'
 import { getEvaluationPrompt } from '../prompt'
+import { init, parsePrompt } from '@monica/prompt-parser-wasm'
+import path from 'node:path'
 
 type EvaluationRunErrorCheckerCodes =
   | RunErrorCodes.EvaluationRunMissingProviderLogError
@@ -25,6 +27,27 @@ type EvaluationRunErrorCheckerCodes =
   | RunErrorCodes.EvaluationRunUnsupportedResultTypeError
   | RunErrorCodes.ChainCompileError
   | RunErrorCodes.Unknown
+
+export async function createChainServer(
+  prompt: string,
+  parameters: Record<string, any>,
+) {
+  // const wasmPath = new URL(
+  //   import.meta.resolve('@monica/prompt-parser-wasm/dist/wasm/main.wasm'),
+  // ).pathname
+  const wasmPath = path.resolve(
+    process.cwd(),
+    '../../../node_modules/@monica/prompt-parser-wasm/dist/wasm/main.wasm',
+  )
+  await init({ wasmPath })
+
+  const parser = await parsePrompt(prompt)
+  const result = parser.render({
+    ...parameters,
+  }) as any
+
+  return createChainFn(result, prompt)
+}
 
 function getResultSchema(type: EvaluationResultableType) {
   switch (type) {
@@ -133,13 +156,7 @@ export class EvaluationRunChecker {
         )
       } else {
         return Result.ok(
-          createChainFn({
-            prompt: evaluationPrompt,
-            parameters: {
-              ...serializedLogResult.value,
-            },
-            includeSourceMap: true,
-          }),
+          await createChainServer(evaluationPrompt, serializedLogResult.value),
         )
       }
     } catch (e) {

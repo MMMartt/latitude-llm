@@ -1,12 +1,12 @@
 import CompileError from '$compiler/error/error'
-import { OpenAI } from 'openai'
+import { Message } from './message'
 
 export type Config = Record<string, unknown>
 
 export type Conversation = {
   config: Config
   // ChatCompletionMessageParam
-  messages: OpenAI.Chat.ChatCompletionMessageParam[]
+  messages: Message[]
 }
 
 export type ConversationMetadata = {

@@ -1,47 +1,14 @@
-import { Conversation, ConversationMetadata } from '$compiler/types'
+import { ConversationMetadata } from '$compiler/types'
 import { z } from 'zod'
 
-import { Chain } from './chain'
-import {
-  ReadMetadata,
-  type Document,
-  type ReferencePromptFn,
-} from './readMetadata'
-import type { CompileOptions } from './types'
+import { type Document, type ReferencePromptFn } from './readMetadata'
+import yaml from 'yaml'
+import type { PromptFile } from '@monica/prompt-parser-wasm/dist/src/schema'
+import OpenAI from 'openai'
+import { convertReqToChainStep } from '$compiler/compiler/chain'
 
-export async function render({
+export async function readMetadata({
   prompt,
-  parameters = {},
-  ...options
-}: {
-  prompt: string
-  parameters?: Record<string, unknown>
-} & CompileOptions): Promise<Conversation> {
-  const iterator = new Chain({ prompt, parameters, ...options })
-  const { conversation, completed } = await iterator.step()
-  if (!completed) {
-    throw new Error('Use a Chain to render prompts with multiple steps')
-  }
-  return conversation
-}
-
-export function createChain({
-  prompt,
-  parameters,
-  ...options
-}: {
-  prompt: string
-  parameters: Record<string, unknown>
-} & CompileOptions): Chain {
-  return new Chain({ prompt, parameters, ...options })
-}
-
-export function readMetadata({
-  prompt,
-  fullPath,
-  referenceFn,
-  withParameters,
-  configSchema,
 }: {
   prompt: string
   fullPath?: string
@@ -49,12 +16,37 @@ export function readMetadata({
   withParameters?: string[]
   configSchema?: z.ZodType
 }): Promise<ConversationMetadata> {
-  return new ReadMetadata({
-    document: { path: fullPath ?? '', content: prompt },
-    referenceFn,
-    withParameters,
-    configSchema,
-  }).run()
+  const promptFile = yaml.parse(prompt) as PromptFile
+  const parameters = new Set<string>()
+  try {
+    Object.keys(promptFile.input_schema.properties).forEach((k) =>
+      parameters.add(k),
+    )
+  } catch (_) {
+    //
+  }
+  return {
+    config: {},
+    errors: [],
+    parameters,
+    includedPromptPaths: new Set<string>(),
+    resolvedPrompt: prompt,
+  } as never as ConversationMetadata
 }
 
-export { Chain, type Document, type ReferencePromptFn }
+function createChain(
+  req: OpenAI.Chat.ChatCompletionCreateParams,
+  prompt: string,
+) {
+  console.log({ req, prompt })
+  return {
+    rawText: prompt,
+    step: async () => {
+      const ret = convertReqToChainStep(req, prompt)
+      return ret
+    },
+    completed: true,
+  }
+}
+
+export { type Document, type ReferencePromptFn, createChain }

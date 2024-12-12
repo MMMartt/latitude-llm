@@ -1,15 +1,11 @@
-import {
-  createChain as createLegacyChain,
-  readMetadata,
-  ReferencePromptFn,
-} from '@latitude-data/compiler'
+import { ReferencePromptFn } from '@latitude-data/compiler'
 import { RunErrorCodes } from '@latitude-data/constants/errors'
-import { Adapters, Chain as PromptlChain, scan } from '@latitude-data/promptl'
 
 import { DocumentVersion, ErrorableEntity } from '../../../browser'
 import { Result } from '../../../lib'
 import { ChainError } from '../../chains/ChainErrors'
 import { createRunError } from '../../runErrors/create'
+import { createChainServer } from '../../evaluations/EvaluationRunChecker'
 
 type RunDocumentErrorCodes = RunErrorCodes.ChainCompileError
 
@@ -41,55 +37,12 @@ export class RunDocumentChecker {
   }
 
   async call() {
-    const chainResult = await this.createChain()
-    if (chainResult.error) return chainResult
+    const chainResult = await createChainServer(this.prompt, this.parameters)
 
+    console.log({chainResult})
     return Result.ok({
-      chain: chainResult.value,
+      chain: chainResult,
     })
-  }
-
-  private async createChain() {
-    try {
-      if (this.document.promptlVersion === 0) {
-        const metadata = await readMetadata({
-          prompt: this.prompt,
-          fullPath: this.document.path,
-          referenceFn: this.referenceFn,
-        })
-
-        return Result.ok(
-          createLegacyChain({
-            prompt: metadata.resolvedPrompt,
-            parameters: this.parameters,
-            includeSourceMap: true,
-          }),
-        )
-      } else {
-        const metadata = await scan({
-          prompt: this.prompt,
-          fullPath: this.document.path,
-          referenceFn: this.referenceFn,
-        })
-
-        return Result.ok(
-          new PromptlChain({
-            prompt: metadata.resolvedPrompt,
-            parameters: this.processParameters(this.parameters),
-            adapter: Adapters.default,
-            includeSourceMap: true,
-          }),
-        )
-      }
-    } catch (e) {
-      const err = e as Error
-      const error = new ChainError({
-        code: RunErrorCodes.ChainCompileError,
-        message: `Error compiling prompt for document uuid: ${this.document.documentUuid} - ${err.message}`,
-      })
-      await this.saveError(error)
-      return Result.error(error)
-    }
   }
 
   private async saveError(error: ChainError<RunDocumentErrorCodes>) {
