@@ -65,9 +65,9 @@ export const generateSuggestedEvaluationsAction = authProcedure
     if (!result) return undefined
 
     const res = result.response as ChainStepResponse<'object'>
-    if (!res.object) return undefined
+    if (!res.text) return undefined
 
-    const suggestedEvaluation = res.object
+    const suggestedEvaluation = JSON.parse(res.text)
 
     try {
       await cacheInstance.set(cacheKey, JSON.stringify(suggestedEvaluation))

@@ -88,5 +88,5 @@ export const requestSuggestionAction = authProcedure
     })
 
     const resultResponse = result.response as ChainStepResponse<'object'>
-    return resultResponse.object
+    return JSON.parse(resultResponse.text)
   })

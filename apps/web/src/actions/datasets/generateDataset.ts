@@ -65,7 +65,9 @@ export async function generateDatasetAction({
       },
     )
     const sdkResult = sdkResponse
-    const csv = (sdkResult?.response! as ChainStepResponse<'object'>).object.csv
+    const csv = JSON.parse(
+      (sdkResult?.response! as ChainStepResponse<'object'>).text,
+    ).csv
     const result = await createDataset({
       author: user,
       workspace,

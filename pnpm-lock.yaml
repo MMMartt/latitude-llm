@@ -34,7 +34,7 @@ importers:
         version: 4.6.0(monaco-editor@0.50.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@monica/prompt-parser-wasm':
         specifier: git+ssh://git@gitlab.monica.cn:tools/prompt-parser-wasm.git
-        version: git+ssh://git@gitlab.monica.cn/tools/prompt-parser-wasm.git#131f6cfd9b590e7eeec9c64c6dc06ab34495ba97(encoding@0.1.13)(zod@3.23.8)
+        version: git+ssh://git@gitlab.monica.cn/tools/prompt-parser-wasm.git#a94264a734c0c5eb92249b90e824b06ea4cf4508(encoding@0.1.13)(zod@3.23.8)
       '@plunk/node':
         specifier: ^3.0.2
         version: 3.0.3
@@ -2930,8 +2930,8 @@ packages:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
 
-  '@monica/prompt-parser-wasm@git+ssh://git@gitlab.monica.cn/tools/prompt-parser-wasm.git#131f6cfd9b590e7eeec9c64c6dc06ab34495ba97':
-    resolution: {commit: 131f6cfd9b590e7eeec9c64c6dc06ab34495ba97, repo: ssh://git@gitlab.monica.cn/tools/prompt-parser-wasm.git, type: git}
+  '@monica/prompt-parser-wasm@git+ssh://git@gitlab.monica.cn/tools/prompt-parser-wasm.git#a94264a734c0c5eb92249b90e824b06ea4cf4508':
+    resolution: {commit: a94264a734c0c5eb92249b90e824b06ea4cf4508, repo: ssh://git@gitlab.monica.cn/tools/prompt-parser-wasm.git, type: git}
     version: 1.0.0
     engines: {node: '>=16.0.0'}
 
@@ -14178,7 +14178,7 @@ snapshots:
       react: 19.0.0-rc-5d19e1c8-20240923
       react-dom: 19.0.0-rc-5d19e1c8-20240923(react@19.0.0-rc-5d19e1c8-20240923)
 
-  '@monica/prompt-parser-wasm@git+ssh://git@gitlab.monica.cn/tools/prompt-parser-wasm.git#131f6cfd9b590e7eeec9c64c6dc06ab34495ba97(encoding@0.1.13)(zod@3.23.8)':
+  '@monica/prompt-parser-wasm@git+ssh://git@gitlab.monica.cn/tools/prompt-parser-wasm.git#a94264a734c0c5eb92249b90e824b06ea4cf4508(encoding@0.1.13)(zod@3.23.8)':
     dependencies:
       openai: 4.76.1(encoding@0.1.13)(zod@3.23.8)
     transitivePeerDependencies:
