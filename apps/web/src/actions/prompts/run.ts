@@ -32,7 +32,6 @@ export const runPromptAction = authProcedure
           workspaceId: ctx.workspace.id,
         }),
       }
-      console.log({ args })
       const run = await runPrompt(args).then((r) => r.unwrap())
 
       pipeToStream(run.stream, stream)

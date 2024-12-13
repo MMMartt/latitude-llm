@@ -77,11 +77,14 @@ export function GenerateDatasetContent({
         event === StreamEventTypes.Latitude &&
         data.type === ChainEventTypes.Complete
       ) {
-        const parsedCsv = await syncReadCsv(data.response.object.csv, {
-          delimiter: ',',
-        }).then((r) => r.unwrap())
+        const parsedCsv = await syncReadCsv(
+          JSON.parse(data.response.text).csv,
+          {
+            delimiter: ',',
+          },
+        ).then((r) => r.unwrap())
         setPreviewCsv(parsedCsv)
-        setExplanation(data.response.object.explanation)
+        setExplanation(JSON.parse(data.response.text).explanation)
       }
     },
   )

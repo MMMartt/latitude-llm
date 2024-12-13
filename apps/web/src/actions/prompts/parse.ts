@@ -14,6 +14,18 @@ export async function parsePromptServer(
   await init({ wasmPath })
 
   const parser = await parsePrompt(prompt)
-  console.log({ parser })
-  return parser.render(input) as any
+  return parser.render({
+    ...Object.entries(input).reduce(
+      (acc: Record<string, any>, [key, value]): Record<string, any> => {
+        try {
+          acc[key] = JSON.parse(value as any)
+          return acc
+        } catch (_) {
+          acc[key] = value
+          return acc
+        }
+      },
+      {},
+    ),
+  }) as any
 }

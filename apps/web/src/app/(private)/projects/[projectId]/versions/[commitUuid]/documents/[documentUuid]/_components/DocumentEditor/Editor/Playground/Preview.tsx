@@ -91,10 +91,8 @@ export default function Preview({
     if (!metadata) return
     if (metadata.errors.length > 0) return
 
-    console.log({ metadata, parameters })
     parsePromptServer(metadata.resolvedPrompt, parameters)
       .then((req) => {
-        console.log({req})
         setError(undefined)
         setConversation({
           config: {},

@@ -39,7 +39,6 @@ export class RunDocumentChecker {
   async call() {
     const chainResult = await createChainServer(this.prompt, this.parameters)
 
-    console.log({chainResult})
     return Result.ok({
       chain: chainResult,
     })

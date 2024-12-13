@@ -38,7 +38,6 @@ function createChain(
   req: OpenAI.Chat.ChatCompletionCreateParams,
   prompt: string,
 ) {
-  console.log({ req, prompt })
   return {
     rawText: prompt,
     step: async () => {

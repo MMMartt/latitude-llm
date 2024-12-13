@@ -30,12 +30,10 @@ export async function runPrompt({
       withParameters: Object.keys(parameters),
     })
   } catch (error) {
-    console.log({error})
     return Result.error(error as Error)
   }
 
   chain = await createChainServer(metadata.resolvedPrompt, parameters)
-  console.log({chain})
   // } else {
   //   chain = new PromptlChain({
   //     prompt,

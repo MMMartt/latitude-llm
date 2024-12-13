@@ -36,7 +36,6 @@ export type ReadMetadataWorkerProps = Parameters<typeof readMetadata>[0] & {
 
 self.onmessage = async function (event: { data: ReadMetadataWorkerProps }) {
   const { prompt } = event.data
-  console.log(prompt)
   const promptFile = yaml.parse(prompt) as PromptFile
   const parameters = new Set<string>()
   try {

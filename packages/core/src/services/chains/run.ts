@@ -87,7 +87,6 @@ export async function runChain<T extends boolean, C extends SomeChain>({
   persistErrors = true,
   generateUUID = generateUUIDIdentifier,
 }: RunChainArgs<T, C>) {
-  console.log({chain})
   const errorableUuid = generateUUID()
 
   let responseResolve: (value: ChainResponse<StreamType>) => void

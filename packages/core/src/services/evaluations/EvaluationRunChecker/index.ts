@@ -35,15 +35,29 @@ export async function createChainServer(
   // const wasmPath = new URL(
   //   import.meta.resolve('@monica/prompt-parser-wasm/dist/wasm/main.wasm'),
   // ).pathname
+  const p = process.cwd()
   const wasmPath = path.resolve(
-    process.cwd(),
-    '../../node_modules/@monica/prompt-parser-wasm/dist/wasm/main.wasm',
+    p,
+    p.includes('apps/web')
+      ? '../../node_modules/@monica/prompt-parser-wasm/dist/wasm/main.wasm'
+      : '../../../node_modules/@monica/prompt-parser-wasm/dist/wasm/main.wasm',
   )
   await init({ wasmPath })
 
   const parser = await parsePrompt(prompt)
   const result = parser.render({
-    ...parameters,
+    ...Object.entries(parameters).reduce(
+      (acc: Record<string, any>, [key, value]): Record<string, any> => {
+        try {
+          acc[key] = JSON.parse(value)
+          return acc
+        } catch (_) {
+          acc[key] = value
+          return acc
+        }
+      },
+      {},
+    ),
   }) as any
 
   return createChainFn(result, prompt)
@@ -143,22 +157,22 @@ export class EvaluationRunChecker {
           EvaluationMetadataType.LlmAsJudgeAdvanced ||
         this.evaluation.metadata.promptlVersion !== 0
 
-      if (usePromptL) {
-        return Result.ok(
-          new PromptlChain({
-            prompt: evaluationPrompt,
-            parameters: {
-              ...serializedLogResult.value,
-            },
-            adapter: Adapters.default,
-            includeSourceMap: true,
-          }),
-        )
-      } else {
-        return Result.ok(
-          await createChainServer(evaluationPrompt, serializedLogResult.value),
-        )
-      }
+      // if (usePromptL) {
+      //   return Result.ok(
+      //     new PromptlChain({
+      //       prompt: evaluationPrompt,
+      //       parameters: {
+      //         ...serializedLogResult.value,
+      //       },
+      //       adapter: Adapters.default,
+      //       includeSourceMap: true,
+      //     }),
+      //   )
+      // } else {
+      return Result.ok(
+        await createChainServer(evaluationPrompt, serializedLogResult.value),
+      )
+      // }
     } catch (e) {
       const err = e as Error
       const error = new ChainError({
