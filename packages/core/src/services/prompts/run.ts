@@ -1,7 +1,10 @@
+import { Chain as LegacyChain, readMetadata } from '@latitude-data/compiler'
+import { Chain as PromptlChain } from '@latitude-data/promptl'
 import { Workspace } from '../../browser'
 import { LogSources } from '../../constants'
 import { Result } from '../../lib'
 import { CachedApiKeys, runChain } from '../chains/run'
+import { createChainServer } from '../evaluations/EvaluationRunChecker'
 
 export async function runPrompt({
   workspace,
@@ -19,29 +22,27 @@ export async function runPrompt({
   source: LogSources
 }) {
   let chain: PromptlChain | LegacyChain
-  if (promptlVersion === 0) {
-    let metadata
-    try {
-      metadata = await readMetadata({
-        prompt,
-        withParameters: Object.keys(parameters),
-      })
-    } catch (error) {
-      return Result.error(error as Error)
-    }
-
-    chain = createChain({
-      prompt: metadata.resolvedPrompt,
-      parameters,
-      includeSourceMap: true,
-    })
-  } else {
-    chain = new PromptlChain({
+  // if (promptlVersion === 0) {
+  let metadata
+  try {
+    metadata = await readMetadata({
       prompt,
-      parameters,
-      includeSourceMap: true,
+      withParameters: Object.keys(parameters),
     })
+  } catch (error) {
+    console.log({error})
+    return Result.error(error as Error)
   }
+
+  chain = await createChainServer(metadata.resolvedPrompt, parameters)
+  console.log({chain})
+  // } else {
+  //   chain = new PromptlChain({
+  //     prompt,
+  //     parameters,
+  //     includeSourceMap: true,
+  //   })
+  // }
 
   const run = await runChain({
     workspace,

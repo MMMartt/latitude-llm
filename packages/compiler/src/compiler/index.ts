@@ -48,5 +48,6 @@ function createChain(
     completed: true,
   }
 }
+export type Chain = ReturnType<typeof createChain>
 
 export { type Document, type ReferencePromptFn, createChain }

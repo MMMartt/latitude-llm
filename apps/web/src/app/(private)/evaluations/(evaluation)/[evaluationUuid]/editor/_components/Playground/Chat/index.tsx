@@ -93,6 +93,7 @@ export default function Chat({
     })
     if (error) {
       setError(error)
+      setIsStreaming(false)
       return
     }
 
