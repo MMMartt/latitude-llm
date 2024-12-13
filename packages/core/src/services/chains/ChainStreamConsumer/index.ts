@@ -23,16 +23,17 @@ export function parseResponseText(response: ChainStepResponse<StreamType>) {
   const text = response.text
   if (text && text.length > 0) return text
 
-  return objectToString(
-    response.toolCalls.map((toolCall) => {
-      return {
-        type: ContentType.toolCall,
-        toolCallId: toolCall.id,
-        toolName: toolCall.name,
-        args: toolCall.arguments,
-      } as ToolRequestContent
-    }),
-  )
+  // return objectToString(
+  //   response.toolCalls.map((toolCall) => {
+  //     return {
+  //       type: ContentType.toolCall,
+  //       toolCallId: toolCall.id,
+  //       toolName: toolCall.name,
+  //       args: toolCall.arguments,
+  //     } as ToolRequestContent
+  //   }),
+  // )
+  return ''
 }
 
 export function enqueueChainEvent(

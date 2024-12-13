@@ -49,6 +49,7 @@ export function useChat({
         })
 
         for await (const serverEvent of readStreamableValue(output)) {
+          // console.log({serverEvent})
           if (!serverEvent) continue
 
           const { event, data } = serverEvent

@@ -34,7 +34,7 @@ importers:
         version: 4.6.0(monaco-editor@0.50.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@monica/prompt-parser-wasm':
         specifier: git+ssh://git@gitlab.monica.cn:tools/prompt-parser-wasm.git
-        version: git+ssh://git@gitlab.monica.cn/tools/prompt-parser-wasm.git#a4f0e0e99b6522677c1205ad753753380e60dae6(encoding@0.1.13)(zod@3.23.8)
+        version: git+ssh://git@gitlab.monica.cn/tools/prompt-parser-wasm.git#131f6cfd9b590e7eeec9c64c6dc06ab34495ba97(encoding@0.1.13)(zod@3.23.8)
       '@plunk/node':
         specifier: ^3.0.2
         version: 3.0.3
@@ -2930,8 +2930,8 @@ packages:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
 
-  '@monica/prompt-parser-wasm@git+ssh://git@gitlab.monica.cn/tools/prompt-parser-wasm.git#a4f0e0e99b6522677c1205ad753753380e60dae6':
-    resolution: {commit: a4f0e0e99b6522677c1205ad753753380e60dae6, repo: ssh://git@gitlab.monica.cn/tools/prompt-parser-wasm.git, type: git}
+  '@monica/prompt-parser-wasm@git+ssh://git@gitlab.monica.cn/tools/prompt-parser-wasm.git#131f6cfd9b590e7eeec9c64c6dc06ab34495ba97':
+    resolution: {commit: 131f6cfd9b590e7eeec9c64c6dc06ab34495ba97, repo: ssh://git@gitlab.monica.cn/tools/prompt-parser-wasm.git, type: git}
     version: 1.0.0
     engines: {node: '>=16.0.0'}
 
@@ -14178,7 +14178,7 @@ snapshots:
       react: 19.0.0-rc-5d19e1c8-20240923
       react-dom: 19.0.0-rc-5d19e1c8-20240923(react@19.0.0-rc-5d19e1c8-20240923)
 
-  '@monica/prompt-parser-wasm@git+ssh://git@gitlab.monica.cn/tools/prompt-parser-wasm.git#a4f0e0e99b6522677c1205ad753753380e60dae6(encoding@0.1.13)(zod@3.23.8)':
+  '@monica/prompt-parser-wasm@git+ssh://git@gitlab.monica.cn/tools/prompt-parser-wasm.git#131f6cfd9b590e7eeec9c64c6dc06ab34495ba97(encoding@0.1.13)(zod@3.23.8)':
     dependencies:
       openai: 4.76.1(encoding@0.1.13)(zod@3.23.8)
     transitivePeerDependencies:
@@ -21235,7 +21235,7 @@ snapshots:
 
   jest-worker@27.5.1:
     dependencies:
-      '@types/node': 22.10.2
+      '@types/node': 20.17.10
       merge-stream: 2.0.0
       supports-color: 8.1.1
 

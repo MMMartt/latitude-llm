@@ -11,6 +11,7 @@ import {
   ChainEventTypes,
   StreamEventTypes,
   type DocumentVersion,
+  ChainStepTextResponse,
 } from '@latitude-data/core/browser'
 import {
   ChatTextArea,
@@ -109,6 +110,7 @@ export default function Chat({
 
       for await (const serverEvent of readStreamableValue(output)) {
         if (!serverEvent) continue
+        // console.log({ serverEvent })
 
         const { event, data } = serverEvent
 
@@ -189,6 +191,7 @@ export default function Chat({
 
         for await (const serverEvent of readStreamableValue(output)) {
           if (!serverEvent) continue
+          // console.log({ serverEvent })
 
           const { event, data } = serverEvent
 
@@ -200,6 +203,7 @@ export default function Chat({
                 addMessageToConversation({
                   role: MessageRole.assistant,
                   content: data.response.text,
+                  toolCalls: (data.response as ChainStepTextResponse).toolCalls,
                 } as AssistantMessage)
 
                 setUsage(data.response.usage)

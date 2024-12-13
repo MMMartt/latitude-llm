@@ -1,6 +1,11 @@
 'use client'
 
-import { Message as ConversationMessage } from '@latitude-data/compiler'
+import {
+  ContentType,
+  Message as ConversationMessage,
+  ToolCall,
+  ToolRequestContent,
+} from '@latitude-data/compiler'
 
 import { Message } from '../Message'
 
@@ -19,7 +24,26 @@ export function MessageList({
         <Message
           key={index}
           role={message.role}
-          content={message.content}
+          content={
+            typeof message.content === 'string'
+              ? [
+                  {
+                    type: ContentType.text,
+                    text: message.content,
+                  } as any,
+                  ...(message.toolCalls
+                    ? (message.toolCalls as ToolCall[]).map(
+                        (a): ToolRequestContent => ({
+                          type: ContentType.toolCall,
+                          toolCallId: a.id,
+                          toolName: a.name,
+                          args: a.arguments,
+                        }),
+                      )
+                    : []),
+                ]
+              : message.content
+          }
           parameters={parameters}
           collapseParameters={collapseParameters}
         />

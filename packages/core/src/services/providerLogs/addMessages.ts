@@ -82,16 +82,20 @@ export async function addMessages({
     ...providerLog.messages,
     {
       role: MessageRole.assistant,
-      content:
-        providerLog.toolCalls.length > 0
-          ? providerLog.toolCalls.map((t) => ({
-              type: ContentType.toolCall,
-              toolCallId: t.id,
-              toolName: t.name,
-              args: t.arguments,
-            }))
-          : providerLog.responseText ||
+      content: [
+        {
+          type: ContentType.text,
+          text:
+            providerLog.responseText ||
             objectToString(providerLog.responseObject),
+        },
+        ...providerLog.toolCalls.map((tc) => ({
+          type: ContentType.toolCall,
+          toolCallId: tc.id,
+          toolName: tc.name,
+          args: tc.arguments,
+        })),
+      ],
     } as AssistantMessage,
     ...messages,
   ]

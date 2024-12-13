@@ -99,6 +99,7 @@ export default function Chat({
     const { output } = data!
 
     for await (const serverEvent of readStreamableValue(output)) {
+      // console.log(serverEvent)
       if (!serverEvent) continue
 
       const { event, data } = serverEvent
