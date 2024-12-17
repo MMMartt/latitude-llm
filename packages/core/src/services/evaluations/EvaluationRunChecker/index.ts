@@ -1,6 +1,5 @@
 import { createChain as createChainFn } from '@latitude-data/compiler'
 import { RunErrorCodes } from '@latitude-data/constants/errors'
-import { Adapters, Chain as PromptlChain } from '@latitude-data/promptl'
 import { JSONSchema7 } from 'json-schema'
 
 import {
@@ -40,7 +39,7 @@ export async function createChainServer(
     p,
     p.includes('apps/web')
       ? '../../node_modules/@monica/prompt-parser-wasm/dist/wasm/main.wasm'
-      : '../../../node_modules/@monica/prompt-parser-wasm/dist/wasm/main.wasm',
+      : '../../node_modules/@monica/prompt-parser-wasm/dist/wasm/main.wasm',
   )
   await init({ wasmPath })
 

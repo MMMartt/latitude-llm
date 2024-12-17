@@ -153,6 +153,8 @@ export function createProvider({
               headers: {
                 ...init.headers,
                 'Content-Type': 'application/json',
+                'x-request-task-type': 'latitude',
+                'x-request-user-id': '190'
               },
             }
 

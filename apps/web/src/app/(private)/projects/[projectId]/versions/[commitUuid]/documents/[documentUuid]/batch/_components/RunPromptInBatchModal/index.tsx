@@ -89,12 +89,9 @@ function useRunDocumentInBatchForm({
       if (!document || !document.content) return
 
       // TODO: Include referenceFn, otherwise it will fail if the prompt contains references
-      const metadata =
-        document.promptlVersion === 0
-          ? await readMetadata({
-              prompt: document.content,
-            })
-          : await scan({ prompt: document.content })
+      const metadata = await readMetadata({
+        prompt: document.content,
+      })
 
       setMetadata(metadata as ConversationMetadata)
 
