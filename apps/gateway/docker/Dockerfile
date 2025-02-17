@@ -5,11 +5,12 @@ ARG SENTRY_AUTH_TOKEN
 FROM node:20-alpine AS alpine
 
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk add --no-cache libc6-compat curl
+RUN apk add --no-cache libc6-compat curl git openssh-client
 
 FROM alpine as base
 
 # Will be used to cache pnpm store
+RUN npm install -g corepack@latest
 RUN corepack enable
 
 # Install pnpm
@@ -41,7 +42,11 @@ WORKDIR /app
 
 COPY --from=pruner /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 COPY --from=pruner /app/out/pnpm-workspace.yaml ./pnpm-workspace.yaml
-COPY --from=pruner /app/out/json/ .
+
+ARG SSH_PRIVATE_KEY
+RUN mkdir -p -m 0700 /root/.ssh && ssh-keyscan gitlab.monica.cn >> /root/.ssh/known_hosts && \
+   echo "${SSH_PRIVATE_KEY}" > /root/.ssh/id_rsa && \
+   chmod 600 /root/.ssh/id_rsa
 
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install \
   --frozen-lockfile \

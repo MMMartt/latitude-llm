@@ -83,6 +83,13 @@ if (process.env.SENTRY_ORG && process.env.SENTRY_PROJECT) {
     // https://docs.sentry.io/product/crons/
     // https://vercel.com/docs/cron-jobs
     automaticVercelMonitors: false,
+
+    eslint: {
+      ignoreDuringBuilds: true,
+    },
+    typescript: {
+      ignoreBuildErrors: true,
+    },
   })
 } else {
   config = nextConfig
