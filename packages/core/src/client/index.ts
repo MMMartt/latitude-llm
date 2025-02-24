@@ -10,6 +10,9 @@ export type Database = NodePgDatabase<typeof schema>
 
 const pool = new Pool({
   connectionString: env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  }
 })
 
 export const database = drizzle(pool, { schema })

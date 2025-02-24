@@ -19,7 +19,7 @@ export default function createMailgunTransport({
   if (!domain || !apiKey) return null
 
   const transport = mg({
-    host: 'api.eu.mailgun.net',
+    // host: 'api.eu.mailgun.net',
     protocol: 'https',
     port: 443,
     auth: { domain, apiKey },

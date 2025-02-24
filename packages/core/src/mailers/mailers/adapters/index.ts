@@ -25,7 +25,7 @@ export function createAdapter() {
     transportOptions: { component: 'latitude_mailer' },
   }
 
-  const isPro = env.NODE_ENV === 'production'
+  const isPro = env.NODE_ENV === 'production' || true
 
   const transport: MaybeTransport = isPro
     ? createMailgunTransport(options)

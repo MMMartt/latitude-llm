@@ -17,6 +17,8 @@ if (environment === 'development' || environment === 'test') {
     `../../../../tmp/${FILE_PUBLIC_PATH}`,
   )
 
+  dotenv.config({ path: pathToEnv, debug: false })
+
   dotenv.populate(
     process.env as DotenvPopulateInput,
     {
