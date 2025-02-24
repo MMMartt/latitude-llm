@@ -1,9 +1,6 @@
 import * as path from 'path'
 import * as url from 'url'
-
-import alias from '@rollup/plugin-alias'
 import typescript from '@rollup/plugin-typescript'
-import { dts } from 'rollup-plugin-dts'
 
 /**
  * We have a internal circular dependency in the compiler,
@@ -62,15 +59,15 @@ export default [
       'zod',
     ],
   },
-  {
-    input: 'src/index.ts',
-    output: [{ file: 'dist/index.d.ts', format: 'es' }],
-    plugins: [
-      alias(aliasEntries),
-      dts({
-        tsconfig: './tsconfig.json',
-        exclude: ['**/__tests__', '**/*.test.ts'],
-      }),
-    ],
-  },
+  // {
+  //   input: 'src/index.ts',
+  //   output: [{ file: 'dist/index.d.ts', format: 'es' }],
+  //   plugins: [
+  //     alias(aliasEntries),
+  //     dts({
+  //       tsconfig: './tsconfig.json',
+  //       exclude: ['**/__tests__', '**/*.test.ts'],
+  //     }),
+  //   ],
+  // },
 ]

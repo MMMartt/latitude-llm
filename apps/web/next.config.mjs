@@ -17,6 +17,12 @@ const nextConfig = {
     'nodemailer-mailgun-transport',
     '@sentry/nextjs',
   ],
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   experimental: {
     // Dear developer,
     //

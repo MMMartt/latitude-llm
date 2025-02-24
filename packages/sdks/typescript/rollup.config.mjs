@@ -1,10 +1,7 @@
 import * as path from 'path'
 import * as url from 'url'
-
-import alias from '@rollup/plugin-alias'
 import replace from '@rollup/plugin-replace'
 import typescript from '@rollup/plugin-typescript'
-import { dts } from 'rollup-plugin-dts'
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url))
 const aliasEntries = {
@@ -66,12 +63,12 @@ const config = [
     ],
     external: EXTERNALS,
   },
-  {
-    input: 'src/index.ts',
-    output: [{ file: 'dist/index.d.ts', format: 'es' }],
-    plugins: [alias(aliasEntries), dts()],
-    external: EXTERNALS,
-  },
+  // {
+  //   input: 'src/index.ts',
+  //   output: [{ file: 'dist/index.d.ts', format: 'es' }],
+  //   plugins: [alias(aliasEntries), dts()],
+  //   external: EXTERNALS,
+  // },
 ]
 
 export default config
