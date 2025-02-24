@@ -45,7 +45,7 @@
     "@aws-sdk/client-s3": "^3.645.0",
     "@aws-sdk/s3-request-presigner": "^3.645.0",
     "@monaco-editor/react": "^4.6.0",
-    "@monica/prompt-parser-wasm": "git+ssh://git@gitlab.monica.cn:tools/prompt-parser-wasm.git",
+    "@monica/prompt-parser-wasm": "git+ssh://git@gitlab.monica.cn:tools/prompt-parser-wasm.git#1.1.5",
     "@plunk/node": "^3.0.2",
     "@radix-ui/react-avatar": "^1.1.0",
     "@radix-ui/react-dialog": "^1.1.1",
