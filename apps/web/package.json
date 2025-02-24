@@ -22,6 +22,7 @@
     "@latitude-data/constants": "workspace:*",
     "@latitude-data/core": "workspace:*",
     "@latitude-data/env": "workspace:^",
+    "@monica/prompt-parser-wasm": "git+ssh://git@gitlab.monica.cn:tools/prompt-parser-wasm.git#1.1.5",
     "@latitude-data/promptl": "^0.3.2",
     "@latitude-data/sdk": "workspace:*",
     "@latitude-data/web-ui": "workspace:*",

@@ -9,7 +9,7 @@ export async function parsePromptServer(
 ): Promise<OpenAI.Chat.ChatCompletionCreateParams> {
   const wasmPath = path.resolve(
     process.cwd(),
-    '../../node_modules/@monica/prompt-parser-wasm/dist/wasm/main.wasm',
+    './node_modules/@monica/prompt-parser-wasm/dist/wasm/main.wasm',
   )
   await init({ wasmPath })
 

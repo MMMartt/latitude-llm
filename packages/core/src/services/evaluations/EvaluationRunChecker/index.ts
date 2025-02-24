@@ -37,9 +37,7 @@ export async function createChainServer(
   const p = process.cwd()
   const wasmPath = path.resolve(
     p,
-    p.includes('apps/web')
-      ? '../../node_modules/@monica/prompt-parser-wasm/dist/wasm/main.wasm'
-      : '../../node_modules/@monica/prompt-parser-wasm/dist/wasm/main.wasm',
+    './node_modules/@monica/prompt-parser-wasm/dist/wasm/main.wasm',
   )
   await init({ wasmPath })
 

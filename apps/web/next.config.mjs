@@ -15,6 +15,7 @@ const nextConfig = {
     'bullmq',
     'jose',
     'nodemailer-mailgun-transport',
+    "@monica/prompt-parser-wasm",
     '@sentry/nextjs',
   ],
   typescript: {
