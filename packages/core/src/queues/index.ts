@@ -11,9 +11,7 @@ export const queues = async (
   if (connection) return connection
 
   connection = await buildRedisConnection({
-    host: env.QUEUE_HOST,
-    port: env.QUEUE_PORT,
-    password: env.QUEUE_PASSWORD,
+    url: env.QUEUE_URL,
     enableOfflineQueue,
     maxRetriesPerRequest: null,
     retryStrategy: (times: number) =>

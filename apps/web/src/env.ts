@@ -10,8 +10,8 @@ export default createEnv({
     NODE_ENV: z.string(),
     DATABASE_URL: z.string(),
     WEBSOCKETS_SERVER: z.string(),
-    SUPPORT_APP_ID: z.string(),
-    SUPPORT_APP_SECRET_KEY: z.string(),
+    SUPPORT_APP_ID: z.string().optional(),
+    SUPPORT_APP_SECRET_KEY: z.string().optional(),
   },
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,

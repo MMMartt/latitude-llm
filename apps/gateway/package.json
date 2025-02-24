@@ -6,15 +6,14 @@
   "private": true,
   "scripts": {
     "dev": "tsx watch src/server",
-    "build": "tsup --config tsup.config.ts",
-    "build:sentry": "tsup --config tsup.config.ts && pnpm run sentry:sourcemaps",
+    "build": "tsup --config tsup.config.ts && pnpm run sentry:sourcemaps",
     "dev:debug": "tsx watch --inspect src/server",
     "lint": "eslint src/",
     "prettier": "prettier --write \"**/*.{ts,tsx,md}\"",
     "tc": "tsc --noEmit",
     "test": "vitest --run",
     "test:watch": "vitest",
-    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org latitude-l5 --project latitude-llm-app ./dist && sentry-cli sourcemaps upload --org latitude-l5 --project latitude-llm-app ./dist"
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org butterfly-effect --project latitude ./dist && sentry-cli sourcemaps upload --org butterfly-effect --project latitude ./dist"
   },
   "dependencies": {
     "@hono/node-server": "^1.12.0",

@@ -11,12 +11,11 @@ const __dirname = fileURLToPath(import.meta.url)
 const FILE_PUBLIC_PATH = 'uploads'
 
 if (environment === 'development' || environment === 'test') {
-  const pathToEnv = resolve(cwd(), `../../.env.${environment}`)
   const FILES_STORAGE_PATH = join(
     __dirname,
     `../../../../tmp/${FILE_PUBLIC_PATH}`,
   )
-
+  const pathToEnv = resolve(cwd(), `../../.env.${environment}`)
   dotenv.config({ path: pathToEnv, debug: false })
 
   dotenv.populate(
@@ -25,10 +24,6 @@ if (environment === 'development' || environment === 'test') {
       NODE_ENV: environment,
       FROM_MAILER_EMAIL: 'hello@latitude.so',
       DATABASE_URL: `postgres://latitude:secret@localhost:5432/latitude_${environment}`,
-      QUEUE_PORT: '6379',
-      QUEUE_HOST: '0.0.0.0',
-      CACHE_PORT: '6379',
-      CACHE_HOST: '0.0.0.0',
       GATEWAY_PORT: '8787',
       GATEWAY_HOSTNAME: 'localhost',
       GATEWAY_SSL: 'false',
@@ -55,13 +50,17 @@ if (environment === 'development' || environment === 'test') {
   )
 
   dotenv.config({ path: pathToEnv })
+} else {
+  const pathToEnv = resolve(cwd(), `./.env.production`)
+  dotenv.config({ path: pathToEnv })
 }
 
 export const env = createEnv({
   skipValidation:
     process.env.BUILDING_CONTAINER == 'true' || process.env.NODE_ENV === 'test',
   server: {
-    CACHE_HOST: z.string(),
+    QUEUE_URL: z.string(),
+    CACHE_URL: z.string(),
     DATABASE_URL: z.string().url(),
     DEFAULT_PROJECT_ID: z.coerce.number(),
     DEFAULT_PROVIDER_API_KEY: z.string(),
@@ -71,13 +70,12 @@ export const env = createEnv({
     LATITUDE_DOMAIN: z.string(),
     LATITUDE_EMAIL_DOMAIN: z.string().optional(),
     LATITUDE_URL: z.string().url(),
-    NEXT_PUBLIC_POSTHOG_HOST: z.string(),
-    NEXT_PUBLIC_POSTHOG_KEY: z.string(),
+    NEXT_PUBLIC_POSTHOG_HOST: z.string().optional(),
+    NEXT_PUBLIC_POSTHOG_KEY: z.string().optional(),
     SUPPORT_APP_SECRET_KEY: z.string().optional(),
     LOOPS_API_KEY: z.string().optional(),
     NEXT_PUBLIC_SUPPORT_APP_ID: z.string().optional(),
     NODE_ENV: z.string(),
-    QUEUE_HOST: z.string(),
     WEBSOCKETS_SERVER: z.string(),
     WEBSOCKET_REFRESH_SECRET_TOKEN_KEY: z.string(),
     WEBSOCKET_SECRET_TOKEN_KEY: z.string(),
@@ -85,14 +83,11 @@ export const env = createEnv({
     AWS_ACCESS_KEY: z.string().optional(),
     AWS_ACCESS_SECRET: z.string().optional(),
     AWS_REGION: z.string().optional(),
-    CACHE_PORT: z.coerce.number().optional().default(6379),
     DRIVE_DISK: z.union([z.literal('local'), z.literal('s3')]).optional(),
     FILES_STORAGE_PATH: z.string().optional(),
     FILE_PUBLIC_PATH: z.string().optional(),
     MAILER_API_KEY: z.string().optional(),
     MAILGUN_MAILER_API_KEY: z.string().optional(),
-    QUEUE_PASSWORD: z.string().optional(),
-    QUEUE_PORT: z.coerce.number().optional().default(6379),
     S3_BUCKET: z.string().optional(),
     SENTRY_DSN: z.string().optional(),
     SENTRY_ORG: z.string().optional(),
@@ -116,11 +111,9 @@ export const env = createEnv({
   },
   runtimeEnv: {
     ...process.env,
-    CACHE_PORT: process.env.CACHE_PORT ?? '6379',
     DEFAULT_PROVIDER_ID: 'Latitude',
     DRIVE_DISK: process.env.DRIVE_DISK ?? 'local',
     FILE_PUBLIC_PATH: process.env.FILE_PUBLIC_PATH ?? FILE_PUBLIC_PATH,
-    QUEUE_PORT: process.env.QUEUE_PORT ?? '6379',
     SUPPORT_APP_ID: process.env.SUPPORT_APP_ID ?? '',
     SUPPORT_APP_SECRET_KEY: process.env.SUPPORT_APP_SECRET_KEY ?? '',
     LOOPS_API_KEY: process.env.LOOPS_API_KEY ?? '',

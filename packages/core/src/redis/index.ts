@@ -1,12 +1,11 @@
 import Redis, { RedisOptions } from 'ioredis'
 
 export function buildRedisConnection({
-  port,
-  host,
+  url,
   ...opts
-}: Omit<RedisOptions, 'port' & 'host'> & { host: string; port: number }) {
+}: Omit<RedisOptions, 'port' & 'host'> & { url: string }) {
   return new Promise<Redis>((resolve) => {
-    const instance = new Redis(port, host, opts)
+    const instance = new Redis(url, opts)
 
     instance.connect(() => {
       resolve(instance)

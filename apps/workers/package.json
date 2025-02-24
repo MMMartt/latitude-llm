@@ -12,7 +12,8 @@
     "prettier": "prettier --write \"**/*.{ts,tsx,md}\"",
     "start": "node -r module-alias/register ./dist --env=production",
     "tc": "tsc --noEmit",
-    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org latitude-l5 --project latitude-llm-app ./dist && sentry-cli sourcemaps upload --org latitude-l5 --project latitude-llm-app ./dist"
+
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org butterfly-effect --project latitude ./dist && sentry-cli sourcemaps upload --org butterfly-effect --project latitude ./dist"
   },
   "dependencies": {
     "@latitude-data/core": "workspace:^",

@@ -68,7 +68,7 @@ export default function Page() {
 
         <p>
           Next, look for the error on the{' '}
-          <a href='https://latitude-l5.sentry.io/issues/?project=4507922531418112'>
+          <a href='https://butterfly-effect.sentry.io/issues/?project=4507922531418112'>
             Issues Page
           </a>
           .
