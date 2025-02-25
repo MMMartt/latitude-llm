@@ -247,6 +247,9 @@ importers:
       '@latitude-data/promptl':
         specifier: ^0.3.2
         version: 0.3.2
+      '@monica/prompt-parser-wasm':
+        specifier: git+ssh://git@gitlab.monica.cn:tools/prompt-parser-wasm.git#1.1.5
+        version: git+ssh://git@gitlab.monica.cn/tools/prompt-parser-wasm.git#f629f93d4c373993dd37db0f77c802465053c59d(encoding@0.1.13)(zod@3.23.8)
       '@sentry/cli':
         specifier: ^2.37.0
         version: 2.38.0(encoding@0.1.13)
