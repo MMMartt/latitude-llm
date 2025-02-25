@@ -68,6 +68,7 @@ export async function consumeStream({
   for await (const chunk of streamToGenerator<StreamChunk>(
     result.data.fullStream,
   )) {
+    console.log(chunk)
     if (chunk.type === 'error') {
       finishReason = 'error'
       error = createAIError(
