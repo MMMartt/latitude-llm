@@ -6,14 +6,16 @@ import path from 'node:path'
 export async function parsePromptServer(
   prompt: string,
   input: any,
-): Promise<{ result?: OpenAI.Chat.ChatCompletionCreateParams; error?: Error }> {
-  const wasmPath = path.resolve(
-    process.cwd(),
-    './node_modules/@monica/prompt-parser-wasm/dist/wasm/main.wasm',
-  )
-  await init({ wasmPath })
-
+): Promise<{
+  result?: OpenAI.Chat.ChatCompletionCreateParams
+  error?: string
+}> {
   try {
+    const wasmPath = path.resolve(
+      process.cwd(),
+      './node_modules/@monica/prompt-parser-wasm/dist/wasm/main.wasm',
+    )
+    await init({ wasmPath })
     const parser = await parsePrompt(prompt)
     const r = parser.render({
       ...Object.entries(input).reduce(
@@ -31,7 +33,8 @@ export async function parsePromptServer(
     }) as any
     return { result: r }
   } catch (e) {
-    console.error(e)
-    return { error: e as any }
+    // console.error(e)
+    // console.log('xxxxxxxxxx', e)
+    return { error: e instanceof Error ? e.message : String(e) }
   }
 }

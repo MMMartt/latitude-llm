@@ -81,7 +81,7 @@ export default function Preview({
   const [warningRule, setWarningRule] = useState<AppliedRules | undefined>()
 
   const [completed, setCompleted] = useState(true)
-  const [error, setError] = useState<Error | undefined>(undefined)
+  const [error, setError] = useState<string | undefined>(undefined)
   const containerRef = useRef<HTMLDivElement>(null)
 
   useAutoScroll(containerRef, { startAtBottom: true })
@@ -93,6 +93,7 @@ export default function Preview({
 
     parsePromptServer(metadata.resolvedPrompt, parameters)
       .then((req) => {
+        console.log(req)
         if (req.result) {
           setError(undefined)
           setConversation({
@@ -103,10 +104,11 @@ export default function Preview({
         } else {
           setConversation(undefined)
           setCompleted(true)
-          setError(req.error)
+          setError(new Error(req.error))
         }
       })
       .catch((error) => {
+        console.log(error)
         setConversation(undefined)
         setCompleted(true)
         setError(error)
