@@ -13,8 +13,8 @@ export async function parsePromptServer(
   )
   await init({ wasmPath })
 
-  const parser = await parsePrompt(prompt)
   try {
+    const parser = await parsePrompt(prompt)
     const r = parser.render({
       ...Object.entries(input).reduce(
         (acc: Record<string, any>, [key, value]): Record<string, any> => {
@@ -31,6 +31,7 @@ export async function parsePromptServer(
     }) as any
     return { result: r }
   } catch (e) {
+    console.error(e)
     return { error: e as any }
   }
 }
