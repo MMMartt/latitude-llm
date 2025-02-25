@@ -93,12 +93,18 @@ export default function Preview({
 
     parsePromptServer(metadata.resolvedPrompt, parameters)
       .then((req) => {
-        setError(undefined)
-        setConversation({
-          config: {},
-          messages: req.messages,
-        })
-        setCompleted(completed)
+        if (req.result) {
+          setError(undefined)
+          setConversation({
+            config: {},
+            messages: req.result.messages,
+          })
+          setCompleted(completed)
+        } else {
+          setConversation(undefined)
+          setCompleted(true)
+          setError(req.error)
+        }
       })
       .catch((error) => {
         setConversation(undefined)

@@ -6,7 +6,7 @@ import path from 'node:path'
 export async function parsePromptServer(
   prompt: string,
   input: any,
-): Promise<OpenAI.Chat.ChatCompletionCreateParams> {
+): Promise<{ result?: OpenAI.Chat.ChatCompletionCreateParams; error?: Error }> {
   const wasmPath = path.resolve(
     process.cwd(),
     './node_modules/@monica/prompt-parser-wasm/dist/wasm/main.wasm',
@@ -14,18 +14,23 @@ export async function parsePromptServer(
   await init({ wasmPath })
 
   const parser = await parsePrompt(prompt)
-  return parser.render({
-    ...Object.entries(input).reduce(
-      (acc: Record<string, any>, [key, value]): Record<string, any> => {
-        try {
-          acc[key] = JSON.parse(value as any)
-          return acc
-        } catch (_) {
-          acc[key] = value
-          return acc
-        }
-      },
-      {},
-    ),
-  }) as any
+  try {
+    const r = parser.render({
+      ...Object.entries(input).reduce(
+        (acc: Record<string, any>, [key, value]): Record<string, any> => {
+          try {
+            acc[key] = JSON.parse(value as any)
+            return acc
+          } catch (_) {
+            acc[key] = value
+            return acc
+          }
+        },
+        {},
+      ),
+    }) as any
+    return { result: r }
+  } catch (e) {
+    return { error: e as any }
+  }
 }
