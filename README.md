@@ -121,3 +121,5 @@ Alternatively, we offer a more permissive commercial license for those who need 
 - [Documentation](https://docs.latitude.so/)
 - [Slack community](https://trylatitude.slack.com/join/shared_invite/zt-17dyj4elt-rwM~h2OorAA3NtgmibhnLA#/shared-invite/email)
 - [X / Twitter](https://x.com/trylatitude)
+
+<!-- Test commit by Giyya Pan -->
