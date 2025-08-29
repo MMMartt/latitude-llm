@@ -39,9 +39,10 @@ Latitude puts all these helpful tools in one place. This means you can add AI to
 
 - 👥 Collaborative prompt manager
 - 🚀 Support for advanced features like parameters, snippets, logic, and more
+- ⚡ Enhanced prompt parsing with WASM-based parser for improved performance
 - 🔄 Version control for prompts
 - 🔌 API + SDKs for easy integration
-- 🔍 Built-in observability
+- 🔍 Built-in observability with enhanced logging
 - 📊 Evaluations in batch or real-time
 - 🌟 Open-source driven by the community
 
